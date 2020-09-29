@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { MenuItem, Select, makeStyles } from "@material-ui/core";
-import { getCountries } from "../api/getCountry";
 import GlobeIcon from "../images/globe.png";
 const useStyle = makeStyles(() => ({
   root: {},

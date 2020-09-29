@@ -70,8 +70,6 @@ const Header = () => {
             <ListItem className={classes.item}>Home</ListItem>
             <ListItem className={classes.item}>Travel</ListItem>
             <ListItem className={classes.item}>What is Covid-19</ListItem>
-            <ListItem className={classes.item}>Analytic</ListItem>
-            <ListItem className={classes.item}>About</ListItem>
           </List>
         </Hidden>
         <Hidden mdUp>
