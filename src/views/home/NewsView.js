@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
+import Pagination from "@material-ui/lab/Pagination";
 import timeAgo from "../../utils/time";
 
 const useStyle = makeStyles((theme) => ({
@@ -20,10 +21,30 @@ const useStyle = makeStyles((theme) => ({
     marginRight: 20,
     background: "red",
   },
+  pagination: {
+    "& .MuiPaginationItem-outlined": {
+      border: "1px solid rgba(255,255,255,1)",
+      color: "white",
+    },
+    "& .Mui-selected": {
+      color: "white",
+      background: "rgba(255,255,255,0.3)",
+      "&:hover": {
+        background: "rgba(255,255,255,0.3)",
+      },
+    },
+    "& .MuiPaginationItem-ellipsis": {
+      color: "white",
+    },
+  },
 }));
 
-const NewsView = ({ data }) => {
+const NewsView = ({ data, handleChange }) => {
   const classes = useStyle();
+
+  const handlePageChange = (_, index) => {
+    handleChange(index);
+  };
 
   return (
     <div className={classes.root}>
@@ -82,6 +103,15 @@ const NewsView = ({ data }) => {
               </div>
             );
           })}
+        <div style={{ display: "inline-block", float: "right" }}>
+          <Pagination
+            className={classes.pagination}
+            count={Math.floor(data.total / 9)}
+            variant="outlined"
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </div>
       </div>
     </div>
   );

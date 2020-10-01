@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, makeStyles, Button, TextField } from "@material-ui/core";
+import Pagination from "@material-ui/lab/Pagination";
 import SelectionMenu from "../../components/SelectionMenu";
 import NewsView from "./NewsView";
 import { getGlobal, getCountryData } from "../../api/getData";
@@ -20,9 +21,8 @@ const useStyles = makeStyles((theme) => ({
   },
   dataContentWrapper: {
     display: "flex",
-    alignItems: "center",
+    alignItems: "flex-start",
     flexWrap: "wrap",
-    height: 440,
     justifyContent: "space-evenly",
     padding: 40,
     [theme.breakpoints.down("xs")]: {
@@ -35,6 +35,19 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       opacity: 0.9,
       background: theme.btn.primary,
+    },
+  },
+  pagination: {
+    "& .MuiPaginationItem-outlined": {
+      border: "1px solid rgba(255,255,255,1)",
+      color: "white",
+    },
+    "& .Mui-selected": {
+      color: "white",
+      background: "rgba(255,255,255,0.3)",
+    },
+    "& .MuiPaginationItem-ellipsis": {
+      color: "white",
     },
   },
   contentWrapper: {
@@ -105,7 +118,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.textSize.bm,
     letterSpacing: 1,
     padding: 10,
-    cursor: "pointer",
   },
   td: {
     fontFamily: "'Iceland', monospace",
@@ -158,6 +170,12 @@ const HomeView = () => {
     return 0;
   };
 
+  const sortBytable = (key, isasc) => {
+    const sortedData = countryList.sort(sortingValue(key, isasc));
+    setFilteredData(JSON.parse(JSON.stringify(sortedData)));
+    // setFilteredData(sortedData);
+  };
+
   const handleSearchCountry = (e) => {
     if (e.target.value) {
       const results = countryList.filter((item) => {
@@ -170,13 +188,17 @@ const HomeView = () => {
     setCountryValue(e.target.value);
   };
 
+  const DisplayPieView = () => {
+    return <PieView data={countryList} />;
+  };
+
   const TableView = () => {
     return (
       <>
         <div
           style={{
             width: "100%",
-            height: "100%",
+            height: 380,
             overflow: "auto",
           }}
         >
@@ -185,24 +207,44 @@ const HomeView = () => {
               <thead>
                 <tr>
                   <th className={classes.th} align="left">
-                    Location
+                    <span
+                      style={{ cursor: "pointer", fontFamily: "inherit" }}
+                      onClick={() => sortBytable("countryName")}
+                    >
+                      Location
+                    </span>
                   </th>
                   <th className={classes.th} align="left">
-                    Confirmed
+                    <span
+                      style={{ cursor: "pointer", fontFamily: "inherit" }}
+                      onClick={() => sortBytable("confirmed", "desc")}
+                    >
+                      Confirmed
+                    </span>
                   </th>
                   <th
                     style={{ color: "rgb(214, 102, 121)" }}
                     className={classes.th}
                     align="left"
                   >
-                    Dead
+                    <span
+                      style={{ cursor: "pointer", fontFamily: "inherit" }}
+                      onClick={() => sortBytable("deaths", "desc")}
+                    >
+                      Dead
+                    </span>
                   </th>
                   <th
                     style={{ color: "rgb(113, 255, 47)" }}
                     className={classes.th}
                     align="left"
                   >
-                    Recovered
+                    <span
+                      style={{ cursor: "pointer", fontFamily: "inherit" }}
+                      onClick={() => sortBytable("recovered", "desc")}
+                    >
+                      Recovered
+                    </span>
                   </th>
                 </tr>
               </thead>
@@ -247,40 +289,54 @@ const HomeView = () => {
   const OverView = () => {
     return (
       <>
-        <div className={classes.dataWrapper}>
-          <h1 className={classes.data}>{stringToInt(data.totalConfirmed)}</h1>
-          <div className={classes.l} style={{ color: "grey" }}>
-            Confirmed
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            flexWrap: "wrap",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <div className={classes.dataWrapper}>
+            <h1 className={classes.data}>{stringToInt(data.totalConfirmed)}</h1>
+            <div className={classes.l} style={{ color: "grey" }}>
+              Confirmed
+            </div>
           </div>
-        </div>
-        <div className={classes.dataWrapper}>
-          <h1 className={classes.data} style={{ color: "rgb(214, 102, 121)" }}>
-            {stringToInt(data.totalDeaths)}
-          </h1>
-          <div className={classes.l} style={{ color: "grey" }}>
-            Dead
+          <div className={classes.dataWrapper}>
+            <h1
+              className={classes.data}
+              style={{ color: "rgb(214, 102, 121)" }}
+            >
+              {stringToInt(data.totalDeaths)}
+            </h1>
+            <div className={classes.l} style={{ color: "grey" }}>
+              Dead
+            </div>
           </div>
-        </div>
-        <div className={classes.dataWrapper}>
-          <h1 className={classes.data} style={{ color: "rgb(113, 255, 47)" }}>
-            {stringToInt(data.totalRecovered)}
-          </h1>
-          <div className={classes.l} style={{ color: "grey" }}>
-            Recovered
+          <div className={classes.dataWrapper}>
+            <h1 className={classes.data} style={{ color: "rgb(113, 255, 47)" }}>
+              {stringToInt(data.totalRecovered)}
+            </h1>
+            <div className={classes.l} style={{ color: "grey" }}>
+              Recovered
+            </div>
           </div>
-        </div>
-        <div className={classes.dataWrapper}>
-          <h1 className={classes.data}>{stringToInt(data.totalActiveCases)}</h1>
-          <div className={classes.l} style={{ color: "grey" }}>
-            Active Cases
+          <div className={classes.dataWrapper}>
+            <h1 className={classes.data}>
+              {stringToInt(data.totalActiveCases)}
+            </h1>
+            <div className={classes.l} style={{ color: "grey" }}>
+              Active Cases
+            </div>
           </div>
-        </div>
-        <div className={classes.dataWrapper}>
-          <h1 className={classes.data}>
-            {stringToInt(data.totalNewDeaths || data.dailyDeaths)}
-          </h1>
-          <div className={classes.l} style={{ color: "grey" }}>
-            New Deaths
+          <div className={classes.dataWrapper}>
+            <h1 className={classes.data}>
+              {stringToInt(data.totalNewDeaths || data.dailyDeaths)}
+            </h1>
+            <div className={classes.l} style={{ color: "grey" }}>
+              New Deaths
+            </div>
           </div>
         </div>
       </>
@@ -288,12 +344,18 @@ const HomeView = () => {
   };
 
   const RenderOption = () => {
-    const Option = [OverView, TableView, PieView];
+    const Option = [OverView, TableView, DisplayPieView];
     const ToRender = Option[activeOption];
     return <ToRender />;
   };
 
   const handleChangeOption = (value) => {
+    if (value === 0 || value === 1) {
+      setCountryList(countryList.sort(sortingValue("countryName")));
+    }
+    if (value === 2) {
+      setCountryList(countryList.sort(sortingValue("confirmed", "desc")));
+    }
     setActiveOption(value);
   };
 
@@ -310,6 +372,12 @@ const HomeView = () => {
 
   const getLastNewsData = () => {
     getNewsData().then(({ data }) => {
+      setNewsData(data);
+    });
+  };
+
+  const handleChangeNewsPage = (page) => {
+    getNewsData(page).then(({ data }) => {
       setNewsData(data);
     });
   };
@@ -365,29 +433,42 @@ const HomeView = () => {
           </a>
         </Button>
       </div>
-      {activeOption === 0 && (
-        <SelectionMenu
-          countryList={countryList}
-          onChange={handleChange}
-          value={menuValue}
-        />
-      )}
-      {activeOption === 1 && (
-        <div
-          style={{ display: "flex", alignItems: "center", marginBottom: -10 }}
-        >
-          <span style={{ marginRight: 10 }}>Search : </span>
-          <TextField
-            onChange={handleSearchCountry}
-            classes={{ root: classes.textfield }}
-            value={countryValue}
+      <div
+        style={{
+          height: 450,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around",
+        }}
+      >
+        {activeOption === 0 && (
+          <SelectionMenu
+            countryList={countryList}
+            onChange={handleChange}
+            value={menuValue}
           />
-        </div>
-      )}
+        )}
+        {activeOption === 1 && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: -10,
+            }}
+          >
+            <span style={{ marginRight: 10 }}>Search : </span>
+            <TextField
+              onChange={handleSearchCountry}
+              classes={{ root: classes.textfield }}
+              value={countryValue}
+            />
+          </div>
+        )}
 
-      {/* <Hidden xsDown> */}
-      <div className={classes.dataContentWrapper}>
-        <RenderOption />
+        {/* <Hidden xsDown> */}
+        <div className={classes.dataContentWrapper}>
+          <RenderOption />
+        </div>
       </div>
       <div className={classes.selectionWrapper}>
         {optionLists.map((list, index) => {
@@ -404,7 +485,7 @@ const HomeView = () => {
           );
         })}
       </div>
-      <NewsView data={newsData} />
+      <NewsView handleChange={handleChangeNewsPage} data={newsData} />
       {/* </Hidden> */}
     </Box>
   );

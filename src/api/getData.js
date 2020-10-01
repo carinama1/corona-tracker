@@ -15,9 +15,11 @@ const getCountryData = async (countryCode) => {
   );
 };
 
-const getNewsData = async () => {
+const getNewsData = async (page = 0, limit = 9) => {
   return await fetch(
-    "https://api.coronatracker.com/news/trending?limit=9&offset=0&language=en"
+    `https://api.coronatracker.com/news/trending?limit=${limit}&offset=${
+      page * limit
+    }&language=en`
   );
 };
 
