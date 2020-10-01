@@ -26,6 +26,12 @@ const theme = createMuiTheme({
   btn: {
     primary: "#17a2b8",
   },
+  mainTheme: {
+    primary: "#17a2b8",
+  },
+  textColor: {
+    primary: "primary",
+  },
   textSize: {
     xl: 56,
     l: 36,
