@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Box, makeStyles, Button, TextField } from "@material-ui/core";
-import Pagination from "@material-ui/lab/Pagination";
 import SelectionMenu from "../../components/SelectionMenu";
 import NewsView from "./NewsView";
 import { getGlobal, getCountryData } from "../../api/getData";
@@ -287,6 +286,7 @@ const HomeView = () => {
   };
 
   const OverView = () => {
+    console.log(data);
     return (
       <>
         <div
@@ -324,7 +324,7 @@ const HomeView = () => {
           </div>
           <div className={classes.dataWrapper}>
             <h1 className={classes.data}>
-              {stringToInt(data.totalActiveCases)}
+              {stringToInt(data.totalActiveCases || data.activeCases)}
             </h1>
             <div className={classes.l} style={{ color: "grey" }}>
               Active Cases
